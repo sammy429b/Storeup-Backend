@@ -1,4 +1,4 @@
-import mysql from 'mysql'
+import mysql from 'mysql2'
 
 const connectDB = async () => {
     try {
@@ -8,10 +8,12 @@ const connectDB = async () => {
             password: process.env.MYSQL_PASSWORD,
             database: process.env.MYSQL_DB,
         })
-        console.log(`MySQL connected: ${conn.threadId}`)
+        console.log(`MySQL connected`)
     }
     catch (err) {
         console.log(err)
+    }finally{
+        console.log("code running")
     }
 }
 
