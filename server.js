@@ -1,10 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import connectDB from "./utils/dbconnect.js";
 import mysql from "mysql2";
 import cors from "cors";
-import { loginRoute, registerRoute } from "./routes/Auth.js";
+import loginRoute from "./controllers/login.js";
+import registerRoute from "./controllers/register.js";
 
 const app = express();
 dotenv.config();
@@ -26,8 +26,8 @@ const db = mysql.createPool({
 });
 
 // Corrected route paths
-app.use('/api/auth', loginRoute(db));
-app.use('/api/auth', registerRoute(db));
+app.use("/api/auth", loginRoute(db));
+app.use("/api/auth", registerRoute(db));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -35,5 +35,4 @@ app.get("/", (req, res) => {
 
 app.listen(3000, async () => {
   console.log("Server is listening on port 3000");
-  // await connectDB();
 });
