@@ -13,7 +13,13 @@ const SECRET_KEY = process.env.secret_key;
 // Express middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: ['https://up-shop.netlify.app', 'http://localhost:3000'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
+  allowedHeaders: 'Content-Type, Authorization',
+}));
 
 const db = mysql.createPool({
   host: process.env.MYSQL_HOST,
