@@ -5,6 +5,12 @@ import mysql from "mysql2";
 import cors from "cors";
 import loginRoute from "./controllers/login.js";
 import registerRoute from "./controllers/register.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import fs from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 dotenv.config();
@@ -13,13 +19,14 @@ const SECRET_KEY = process.env.secret_key;
 // Express middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors({
-  origin: ['https://up-shop.netlify.app', 'http://localhost:3000'],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204,
-  allowedHeaders: 'Content-Type, Authorization',
-}));
+app.use(cors());
+// app.use(cors({
+//   origin: ['https://up-shop.netlify.app', 'http://localhost:3000'],
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true,
+//   optionsSuccessStatus: 204,
+//   allowedHeaders: 'Content-Type, Authorization',
+// }));
 
 const db = mysql.createPool({
   host: process.env.MYSQL_HOST,
@@ -29,7 +36,14 @@ const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  ssl: { ca: fs.readFileSync(`${__dirname}/DigiCertGlobalRootCA.crt.pem`) },
 });
+
+if (!db) {
+  console.log("Error connecting to database");
+} else {
+  console.log("Connected to database");
+}
 
 // Corrected route paths
 app.use("/api/auth", loginRoute(db));
