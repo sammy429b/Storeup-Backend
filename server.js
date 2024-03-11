@@ -6,11 +6,11 @@ import cors from "cors";
 import loginRoute from "./controllers/login.js";
 import registerRoute from "./controllers/register.js";
 import { fileURLToPath } from "url";
-import { dirname } from "path";
-import fs from "fs";
+// import { dirname } from "path";
+// import fs from "fs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 
 const app = express();
 dotenv.config();
@@ -19,13 +19,13 @@ const SECRET_KEY = process.env.secret_key;
 // Express middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(cors());
+app.use(cors());
 
-app.use(cors({
-  origin: 'https://up-shop.netlify.app',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Enable CORS credentials (cookies, authorization headers, etc.)
-}));
+// app.use(cors({
+//   origin: 'https://up-shop.netlify.app',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true, // Enable CORS credentials (cookies, authorization headers, etc.)
+// }));
 
 
 
@@ -37,7 +37,7 @@ const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  ssl: { ca: fs.readFileSync(`${__dirname}/DigiCertGlobalRootCA.crt.pem`) },
+  // ssl: { ca: fs.readFileSync(`${__dirname}/DigiCertGlobalRootCA.crt.pem`) },
 });
 
 if (!db) {
